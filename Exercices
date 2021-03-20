@@ -1,0 +1,200 @@
+# PROBLEM SET 2 (UNIGE- 2021) 
+# Exercice 2 (2021)
+
+# You first need to load the library
+library(ggplot2)
+library(dplyr)
+library(knitr)
+
+
+# Then the data from table 2
+A1<-c(55,60,65,70,75,65,70,74,80,85,88,79,84,90,94,98)
+A2<- c(80,80,80,80,80,100,100,100,100,100,100,120,120,120,120,120)
+
+A12<-cbind(A1, A2)
+A12<-as.data.frame(A12);A12
+
+ylce<-function(x){
+        y<-3/5*x+17
+}
+
+# Now the picture
+
+ggplot(aes(x= A2, y = A1), data = A12)+
+        geom_point()+
+        labs(x =" x axis", y=" y axis", 
+     title = " Linear conditional expectation ",
+     subtitle="Problem Set 2 Exercice 2",
+     
+     caption = "source : jca / R Econometrics in R [2] Rmd")+
+         theme(plot.title = element_text(colour = "red", size = 20, face = "bold"))+
+        theme(axis.text.x=element_text(angle=30, vjust=1, hjust=1, family="serif", colour ="darkred"))+
+        theme(text=element_text(family="serif",  
+        colour ="darkred"), axis.title = element_text(siz=(11)),
+        panel.background=element_rect(fill="grey90"))+
+                  theme(plot.title = element_text(face = "bold", 
+                size = 15))+
+        theme (axis.title.y=element_text(angle=0, 
+        face ="italic", colour = "darkred", size = 14),axis.title.x=element_text(angle=0, 
+        face ="italic", 
+        colour = "darkred", size = 14))+
+        theme(plot.margin = unit(c(5,10,5,10), units ="mm"))+
+        theme(panel.border= element_rect(colour = "blue",size = 2, fill=NA))+
+           geom_hline(yintercept=0, size = 0.5)+
+        geom_vline(xintercept=0, size = 0.5)+
+        stat_function(fun= ylce, col="red", size =.9)+
+         scale_x_continuous(breaks= seq(0, 125,10))
+
+# To compute the mean, you first have to select the observations 1, 2 and 3
+
+OB1<-A12%>%filter(A2==80);OB1
+
+OB2<-A12%>%filter(A2==100);OB2
+
+OB3<-A12%>%filter(A2==120);OB3
+
+# Here is 3 ways to get the mean 
+mean(OB1$A1)
+mean(OB1[,1])
+summary(OB1)
+
+# We may do the same for OB2 and OB3
+
+mean(OB2$A1)
+mean(OB2[,1])
+summary(OB2)
+
+
+mean(OB3$A1)
+mean(OB3[,1])
+summary(OB3)
+        
+# To get the variance, there is a function : var().
+# But this function give you the variance divided by (n-1) where n is the number of observations.
+var(OB1$A1)
+
+
+# To get the usual variance, you have to divide the resusalt by n and multiply by (n-1).
+
+# First compute n
+n<- nrow(OB1)
+
+var(OB1$A1)*(n-1)/n
+
+# And you get the expected value of 50.
+
+
+# For the other observations
+
+n2<- nrow(OB2)
+
+var(OB2$A1)*(n2-1)/n2
+
+n3<- nrow(OB3)
+
+var(OB3$A1)*(n3-1)/n3
+
+# The sd() function gives the standart deviation with the same correction...so the sqrt((n-1)/n)
+
+sd(OB1$A1)*sqrt((n-1)/n)
+
+sd(OB2$A1)*sqrt((n2-1)/n2)
+
+sd(OB3$A1)*sqrt((n3-1)/n3)
+
+
+#  PROBLEM SET 3 (UNIGE- 2021) 
+#  Exercice 3
+#  Quetion 4
+
+
+ECO1<-ggplot(data.frame(x=c(0,20)), aes(x=x))
+
+
+ECO1+
+              labs(x ="x", y=" y", 
+     title = " Probability ",
+     subtitle="Problem Set 2 Exercice 3, Question 4",
+     
+     caption = "source : jca / R Econometrics in R [2] Rmd")+
+         theme(plot.title = element_text(colour = "red", size = 20, face = "bold"))+
+        theme(axis.text.x=element_text(angle=30, vjust=1, hjust=1, family="serif", colour ="darkred"))+
+        theme(text=element_text(family="serif",  
+        colour ="darkred"), 
+        axis.title = element_text(siz=(11)),
+        panel.background=element_rect(fill="grey90"))+
+theme(plot.title = element_text(face = "bold", size = 15))+
+        theme (axis.title.y=element_text(angle=0, 
+        face ="italic", colour = "darkred",
+        size = 14),axis.title.x=element_text(angle=0,
+face ="italic", colour = "darkred", size = 14))+
+        theme(plot.margin = unit(c(5,10,5,10), units ="mm"))+
+        theme(panel.border= element_rect(colour = "blue",size = 2, fill=NA))+
+        geom_hline(yintercept=0, size = 0.5)+
+        geom_vline(xintercept=0, size = 0.5)+
+        annotate("segment", x=c(1,2,5,8,9),xend=c(2,5,8,9,10), 
+        y= c(0.25,0.32,0.2,0.15,0.08), 
+        yend= c( 0.32, 0.2,0.15,0.08,0), col="blue")+
+        annotate("segment", x=c(2,4,10,16,18),
+        xend=c(4,10,16,18,20), y= c(0.25,0.32,0.2,0.15,0.08), 
+        yend= c( 0.32, 0.2,0.15,0.08,0), col="red") +
+        annotate("point", x= c(1,2,5,8,9,10), 
+        y= c(0.25,0.32,0.2,0.15,0.08, 0))+
+        annotate("point", x= 2*c(1,2,5,8,9,10), 
+        y= c(0.25,0.32,0.2,0.15,0.08, 0))
+
+# Problem Set 4 UNIGE
+#  Exercice 2 ( 2021 )
+
+
+t1<-c(1,2,3,4,5,6,7,8,9,10,11)
+t2<-c(1,4,4,11,6,10,5,2,5,5,2)
+t3<-c(2,5,6,15,5,12,6,3,5,6,1)
+
+SET42<-cbind(t1, t2, t3)
+SET42<-as.data.frame(SET42);SET42
+names(SET42)<- c("i","x","y")
+
+SET42
+
+summary(SET42)
+
+ResultSET42<- lm(SET42$y ~SET42$x, data = SET42); ResultSET42
+
+ggplot(ResultSET42, aes(x= SET42$x, y=SET42$y))+
+        geom_point(col="blue")+
+        geom_smooth(method = "lm")+
+          labs(x ="x axis", y="y axis", 
+     title = "  Problem Set 4 ",
+     subtitle=" Exercice 2 ",
+     caption = "source : jca / R Ecopo in R [17] Rmd")+
+         theme(plot.title = element_text(colour = "red", size = 20, face = "bold"))+
+        theme(axis.text.x=element_text(angle=30, vjust=1, hjust=1, family="serif", colour ="darkred"))+
+        theme(text=element_text(family="serif",  colour ="darkred"), axis.title = element_text(siz=(11)),panel.background=element_rect(fill="grey90"))+
+                  theme(plot.title = element_text(face = "bold", size = 15))+
+        theme (axis.title.y=element_text(angle=0, face ="italic", colour = "darkred", size = 14),axis.title.x=element_text(angle=0, face ="italic", colour = "darkred", size = 14))+
+        theme(plot.margin = unit(c(5,10,5,10), units ="mm"))+
+        theme(panel.border= element_rect(colour = "blue",size = 2, fill=NA))+
+        geom_hline(yintercept=0, size = 0.5)+
+        geom_vline(xintercept=0, size = 0.5)+
+          scale_x_continuous(breaks= seq(0, 11,1))+
+         scale_y_continuous(breaks= seq(0, 15,1))
+
+summary(ResultSET42)
+
+
+
+RSS = 1.207
+R_squared = 0.92
+TSS = RSS/(1-R_squared); TSS
+ESS = TSS-RSS; ESS
+
+1-RSS/TSS
+
+
+K1<-rbind(c(1.207,0.92, 15.0875, 13.8805 ))
+K1<-as.data.frame(K1)
+names(K1)<-c("RRS", "R-squared","TSS", "ESS")
+kable(K1, caption = 'Statistical Results')
+
+
